@@ -8,16 +8,22 @@ request({ url: weatherUrl, json: true }, (error, response) => {
         console.log('Unable to connect to weather service');
    } else if (response.body.error) {
         console.log('Unable to find location');
-   } else {
-        const data = response.body;   
-        console.log(data);
+   } else { 
+        const temp = response.body.current.temperature;
+        console.log(`The temperature right now is ${temp} degrees`);
    }
 })
 
-// request({ url: locationUrl, json: true }, (error, response) => {
-//     const data = response.body.features[0];
-//     const latitude = data.center[0];
-//     const longitude = data.center[1];
-    
-//     console.log(`the latitude is ${latitude}, and longitude is ${longitude}`);
-// })
+request({ url: locationUrl, json: true }, (error, response) => {
+    if (error) {
+        console.log('Unable to connect to location service')
+    } else if (response.body.features.length === 0) {
+        console.log('No location results found');
+    } else {
+        const data = response.body.features[0];
+        const latitude = data.center[0];
+        const longitude = data.center[1];
+        
+        console.log(`the latitude is ${latitude}, and longitude is ${longitude}`);
+    }    
+})
